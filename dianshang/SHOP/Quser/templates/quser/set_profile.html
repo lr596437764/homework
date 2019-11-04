@@ -1,0 +1,61 @@
+{% extends "quser/base.html" %}
+
+{% block title %}
+    {{ request.COOKIES.email }} 的个人中心
+{% endblock %}
+
+{% block content %}
+    <table class="table dataTable">
+        <tr>
+            <td rowspan="3">
+                <img src="/static/{{ user.picture }}" style="width: 200px;height: 200px;">
+            </td>
+            <td>用户名：</td>
+            <td colspan="2"><input type="text" name="email" value="{{ user.email }}"></td>
+            <td>密码:</td>
+            <td colspan="2">
+
+                <td > <td colspan="2"><a class="btn btn-warning" data-toggle="modal" data-target="#logoutModal">修改密码</a></td></td>
+            </td>
+        </tr>
+        <tr>
+            <td>姓名：</td>
+            <td><input type="text" name="email" value="{{ user.user }}"></td>
+            <td>性别:</td>
+            <td><input type="text" name="email" value="{{ user.gender }}"></td>
+            <td>年龄:</td>
+            <td><input type="text" name="email" value="{{ user.age }}"></td>
+        </tr>
+        <tr>
+
+            <td>地址:</td>
+            <td colspan="4"><input type="text" name="email" value="{{ user.address }}"></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <a href="/Quser/profile/" value="确定修改" type="submit" class="btn btn-primary btn-block">确定修改
+            <td>
+        </tr>
+    </table>
+
+{% endblock %}
+
+
+
+{% block div %}
+<form method="post">
+{% csrf_token %}
+     <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">修改密码</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body">如果您准备结束当前会话，请选择下面的“注销”</div>
+
+     <div class="modal-footer">
+       <input type="text" name="mima">
+          <input type="submit" name="提交" value="取消">
+     </div>
+</form>
+{% endblock %}

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-1.11.0.js"></script>
+<style>
+     .food_form input{
+         width: 500px;
+         height: 20px;
+         background-color: yellowgreen;
+
+    }
+
+  .food_form label{
+         width: 500px;
+         height: 20px;
+         background-color: darkturquoise;
+
+    }
+
+
+
+
+</style>
+
+</head>
+<body>
+{##}
+{#    {{ news }}#}
+{##}
+{#<hr>#}
+{#{% for new in news %}#}
+{#{{ new }}#}
+{#{% endfor %}#}
+{#<form  method="post">#}
+{#    {% csrf_token %}#}
+{#    <p>#}
+{#        <label>xm</label>#}
+{#        <input type="text"  name="username">#}
+{#        <br>#}
+{#        <label> xb</label>#}
+{#        <input type="radio" name="xb" value="1">#}
+{#         <span> 男</span>#}
+{#        <input type="radio" name="xb" value="0">#}
+{#         <span>女</span>#}
+{#        <br>#}
+{#        <label> kc</label>#}
+{#       <select name="object">#}
+{#           <option value="python">python</option>#}
+{#           <option value="ava"> java </option>#}
+{#           <option value="c">c</option>#}
+{#       </select>#}
+{#          <br>#}
+{#        <input type="submit"  name="tj">#}
+{#    </p>#}
+{#    {{ a1 }}#}
+{#    <p>#}
+{#        {{ date }}#}
+{#        <br>#}
+{#        {{ d }}#}
+{#        <br>#}
+{#        {{ da }}#}
+{#        <br>#}
+{#         {{ dat }}#}
+{#        <br>#}
+{##}
+{#    </p>#}
+{#</form>#}
+{##}
+{##}
+{#<form  method="post">#}
+{#    {% csrf_token %}#}
+{#    <p>#}
+{#        <label>xm</label>#}
+{#        <input type="text"  name="u">#}
+{##}
+{#    </p>#}
+{#</form>#}
+{##}
+
+
+
+
+
+{#<p>#}
+{#    <label>美食名称：</label>#}
+{#    <input type="text" name="d" id="name">#}
+{#</p>#}
+{#<div id="response">#}
+{##}
+{#</div>#}
+{##}
+{#<script src="/static/js/jquery-1.11.0.js"></script>#}
+{#<script>#}
+{#    $("#name").blur(function () {#}
+{#        var value = $("#name").val();//获取表单数据#}
+{#        var url = "/food_name/?food_name="+value;//get明文显示获取并拼接action#}
+{#        console.log(url);#}
+{#        $.ajax(#}
+{#            {#}
+{#                url: url,//传url#}
+{#                type:"get",//请求方式#}
+{#                data:"",//表单数据#}
+{#                success:function (data) {//成功并获取数据#}
+{#                    var response_data = data["food_data"];#}
+{##}
+{#                    for(var i in response_data){#}
+{##}
+{#                        var food_name = response_data[i]["name"];#}
+{#                        var html = "<p>"+food_name+"</p>";#}
+{#                        $("#response").append(html);#}
+{#                        console.log(html)#}
+{#                    }#}
+{##}
+{#                },#}
+{#                error:function (error) {#}
+{#                    console.log(error)#}
+{#                }#}
+{#            }#}
+{#        )#}
+{#    })#}
+{#</script>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<button id="click">按我呀</button>#}
+{##}
+{##}
+{#<div id="response">#}
+{##}
+{# </div>#}
+{##}
+{#<script src="/static/js/jquery-1.11.0.js"></script>#}
+{#<script>#}
+{#    $("#click").click(#}
+{#        function(){#}
+{##}
+{#                    var Data={#}
+{#                        "name":"边老师",#}
+{#                      "csrfmiddlewaretoken": "{{ csrf_token }}"#}
+{#                    };#}
+{#                    console.log(Data);#}
+{#                    $.ajax(#}
+{#                        {#}
+{#                            url:"/ajx/",#}
+{#                            type:"post",#}
+{#                            data:Data,#}
+{#                            success:function(data){#}
+{#                                $("#response").text(data["result"])#}
+{#                            },#}
+{#                            error:function (error) {#}
+{#                                console.log(error)#}
+{##}
+{#                            }#}
+{##}
+{#                        }#}
+{#                    )#}
+{#                }#}
+{#            )#}
+{##}
+{##}
+{##}
+{##}
+{#</script>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#{{ request }}#}
+{#<br>#}
+{#{{ re }}#}
+{#<br>#}
+{#<hr>#}
+{#{% for k,v in request.META.items %}#}
+{#    <p>{{ k }} : &nbsp {{ v }} </p>>#}
+{#{% endfor %}#}
+
+{#    <form method="post" enctype="multipart/form-data">#}
+{#    {% csrf_token %}#}
+{#        <p>#}
+{#            <label>美食名称</label>#}
+{#            <input type="text" name="name">#}
+{#        </p>#}
+{#        <p>#}
+{#            <label>美食价格</label>#}
+{#            <input type="text" name="price">#}
+{#        </p>#}
+{#        <p>#}
+{#            <label>美食类型</label>#}
+{#            <select nmae="type_id"></select>#}
+{#        </p>#}
+{##}
+{#         <p>#}
+{#            <label>美食描述</label>#}
+{#            <taxtarea nmae="description"></taxtarea>#}
+{#        </p>#}
+{#         <p>#}
+{#            <label>美食描述</label>#}
+{#              <taxtarea nmae="img"></taxtarea>#}
+{#        </p>#}
+{#    </form>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<form>#}
+{#      <p>#}
+{##}
+{#            <label>美食名称</label>#}
+{#            <input type="text" name="name" id="name">#}
+{##}
+{#        </p>#}
+{#</form>#}
+{#<script src="/static/js/jquery-1.11.0.js"></script>#}
+{#<script>#}
+{#    $("#name").blur(function(){#}
+{##}
+{#        var value=$("#name").val();#}
+{#        var url="/func/?food_name="+value;#}
+{#        $.ajax(#}
+{#       {#}
+{#           url:url,#}
+{#           type:"get",#}
+{#           data:"",#}
+{#           success:function (data) {#}
+{#               var response_data=data["food_data"] ;#}
+{#            console.log(response_data);#}
+{#               for(var i in response_data){#}
+{#                   console.log(response_data[i]);#}
+{#               }#}
+{#           },#}
+{#           error:function (error) {#}
+{#               console.log(error)#}
+{##}
+{#           }#}
+{##}
+{##}
+{#       }#}
+{#   )#}
+{##}
+{#    })#}
+{#</script>#}
+
+
+{#<form method="post" onsubmit="return check()">#}
+{#    {% csrf_token %}#}
+{#    <p>#}
+{#        <span>user</span>#}
+{#    <input type="text" id="username" name="username">#}
+{#    </p>#}
+{#    <p>#}
+{#            <span>password</span>#}
+{#    <input type="text" id="username" name="username">#}
+{##}
+{#    </p>#}
+{#     <p>#}
+{##}
+{#    <input type="submit" value="提交">#}
+{##}
+{#    </p>#}
+{##}
+{#</form>#}
+
+
+
+
+
+
+
+
+
+{#<form method="post" onsubmit="return check()">#}
+{#    {% csrf_token %}#}
+{#    <p>#}
+{#    <span>用户名:</span>#}
+{#    <input type="text" id="username" name="username">#}
+{#    </p>#}
+{#    <p>#}
+{#    <span>密码:</span>#}
+{#    <input type="password" id="password" name="password">#}
+{#    </p>#}
+{#    <p>#}
+{#        <input type="submit" value="提交">#}
+{#    </p>#}
+{#</form>#}
+{#<p style="color: red;" id="error_message">#}
+{#</p>#}
+{#<script>#}
+{#    function check() {#}
+{#        var username = $("#username").val();#}
+{#        var password = $("#password").val();#}
+{#        var error_message = $("#error_message");#}
+{#        if(username=="" || password==""){#}
+{#            error_message.text("用户名和密码不可以为空");#}
+{#            return false#}
+{#        }#}
+{#        if(username.length < 6){#}
+{#            error_message.text("用户名必须大于6位");#}
+{#            return false#}
+{#        }#}
+{#        reg=/^(?![0-9]+$)(?![a-z]+$)(?!([^(0-9a-zA-Z)])+$)^.{6,16}$/;#}
+{#        if(!reg.test(username)){#}
+{#            error_message.text("用户名必须包含数字、字母、特殊符号");#}
+{#            return false#}
+{#        }#}
+{#        return true#}
+{#    }#}
+{#</script>#}
+{##}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<br>#}
+{#{% for i in  date%}#}
+{#{{ i.name }}#}
+{#{% endfor %}#}
+
+
+{#{% for food in foods_list %}#}
+{#    {{ food.name }}#}
+{#{% endfor %}#}
+{##}
+{##}
+{#<p>常规</p>#}
+{#{{ userform }}#}
+{#<hr>#}
+{#<p>p标签</p>#}
+{#{{ userform.as_p }}#}
+{#<hr>#}
+{#<p>ul类型</p>#}
+{#{{ userform.as_ul }}#}
+{#<hr>#}
+{#<p>table类型</p>#}
+{#{{ userform.as_table }}#}
+{#<hr>#}
+{#<p>循环类型</p>#}
+{#{% for field in userform %}#}
+{#    <div>#}
+{#        <span>{{ field.label }}</span>#}
+{#        {{ field }}#}
+{#    </div>#}
+{#{% endfor %}#}
+{#<hr>#}
+{#<p>foodform</p>#}
+{#{{ foodform.as_p }}#}
+{#<p>#}
+{#        <input type="button" value="提交">#}
+{#    </p>#}
+
+
+{#<form method="post">#}
+{#     <form method="post" enctype="multipart/form-data">#}
+{#    {% csrf_token %}#}
+{#        <p>#}
+{#            <label>美食名称</label>#}
+{#            <input type="text" name="name">#}
+{#        </p>#}
+{#        <p>#}
+{#            <label>美食价格</label>#}
+{#            <input type="text" name="price">#}
+{#        </p>#}
+{#        <p>#}
+{#            <label>美食类型</label>#}
+{#            <select nmae="type_id"></select>#}
+{#        </p>#}
+{##}
+{#         <p>#}
+{#            <label>美食描述</label>#}
+{#            <taxtarea nmae="description"></taxtarea>#}
+{#        </p>#}
+{#         <p>#}
+{#            <label>图片</label>#}
+{#              <taxtarea nmae="img"></taxtarea>#}
+{#        </p>#}
+{#    </form>#}
+{#</form>#}
+
+{#<script src="/static/js/jquery-1.11.0.js"></script>#}
+{#<button id="click">点我</button>#}
+{#<div id="con">#}
+{##}
+{#</div>#}
+{#<script>#}
+{#    $("#click").click(#}
+{#        function () {#}
+{#            $.ajax(#}
+{#                {#}
+{#                    url:"/ajx/",#}
+{#                    type:"get",#}
+{#                    data:"",#}
+{#                    success:function (data) {#}
+{#                     var shop_list=data["shop_list"];#}
+{#                     for (var i in shop_list){#}
+{#                         var shop =shop_list[i]["name"];#}
+{#                         var ht="<p>"+shop+"</p>";#}
+{#                          $(#con).append(ht)#}
+{#                     }#}
+{##}
+{##}
+{#                    },#}
+{#                    error:function (error) {#}
+{#                        console.log(error)#}
+{##}
+{#                    }#}
+{##}
+{#                }#}
+{##}
+{#            )#}
+{#            #}
+{#        }#}
+{#    )#}
+{#</script>#}
+{#<script  src="/static/js/jquery-1.11.0.js"></script>#}
+{#<button id="click">提交</button>#}
+{#<div id="data">#}
+{##}
+{#</div>#}
+{#<script>#}
+{#    $("#click").click(#}
+{#        function () {#}
+{#            $.ajax({#}
+{#                url: "/ajx",#}
+{#                type:"get",#}
+{#                data:"",#}
+{#                success:function (data) {#}
+{#                    var shop_list=data["shop_list"];#}
+{#                    for (var i in shop_list){#}
+{#                        var shop=shop_list[i]["name"];#}
+{#                        var html="<p>"+shop+"</p>";#}
+{#                        $("#data").append(html);#}
+{#                    }#}
+{##}
+{##}
+{#                },#}
+{#                error:function(error){#}
+{#                    console.log(error);#}
+{##}
+{#                },#}
+{#            })#}
+{##}
+{#        }#}
+{#    )#}
+{##}
+{#</script>#}
+
+{#<script src="/static/js/jquery-1.11.0.js"></script>#}
+{#<form method="post" onsubmit="return check()">#}
+{#    {% csrf_token %}#}
+{#    <p>#}
+{#        <span>用户名</span>#}
+{#        <input type="text" name="user" id="user">#}
+{#    </p>#}
+{#     <p>#}
+{#        <span>密码</span>#}
+{#        <input type="password" name="password" id="password">#}
+{#    </p>#}
+{#     <p>#}
+{#        <span>性别</span>#}
+{#         男<input type="radio" name="gender">#}
+{#         女<input type="radio" name="gender">#}
+{#    </p>#}
+{#    <p>#}
+{#      <input type="submit" value="提交">#}
+{#    </p>#}
+{#    <p id="error">#}
+{##}
+{#    </p>#}
+{#    <script>#}
+{#        function check() {#}
+{#         var user=$("#user").val();#}
+{#         var password=$("#password").val();#}
+{#         var message=$("#error");#}
+{#         if(user=="" || password==""){#}
+{#             message.text("用户名或密码不为空");#}
+{#             return false#}
+{#         }#}
+{#         if (user.length<6){#}
+{#             message.text("最小为6为");#}
+{#             return false#}
+{#         }#}
+{#         zhngze=/^[\u4e00-\u9fa5]{0,}$/ ;#}
+{#         if (zhngze.test(user)) {#}
+{#             message.text("必须为汉子")#}
+{#             return false#}
+{#         }#}
+{#            return true#}
+{#        }#}
+{#    </script>#}
+
+{#</form>#}
+
+{#<p>常规:</p>#}
+{#{{ userform }}#}
+{#<br>#}
+{#<p>p标签类型</p>#}
+{#{{ userform.as_p }}#}
+{#<br>#}
+{#<p>ul标签类型</p>#}
+{#{{ userform.as_ul }}#}
+{#<br>#}
+{#{{ userform.as_table }}#}
+{#<br>#}
+{#{% for form in userform %}#}
+{#<div>#}
+{#<span>{{ form.label }}</span>#}
+{#{{ form }}#}
+{#{% endfor %}#}
+{#</div>#}
+
+{#<form class="food_form" method="post" enctype="multipart/form-data" >#}
+{#    {% csrf_token %}#}
+{#<p>form表单</p>#}
+{#{{ foodform.as_p }}#}
+{#    <P>#}
+{#        <input type="submit" value="提交">#}
+{#    </P>#}
+{##}
+{#    <p style="color: #c21a04">{{ errors }}</p>#}
+{#    <p style="color: mediumspringgreen">{{ data }}</p>#}
+{#    <p style="color: darkblue">{{ request_data }}</p>#}
+{#</form>#}
+{##}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#{% extends 'base.html' %}#}
+{#{% block content %}#}
+{#<form  method="post" >#}
+{#    {% csrf_token %}#}
+{#    <p>#}
+{#        <span>用户名</span>#}
+{#        <input type="text" name="user" id="user" style="border: #c21a04 solid 2px">#}
+{#    </p>#}
+{#     <p>#}
+{#        <span>密码</span>#}
+{#        <input type="password" name="password" id="password" style="border: #c21a04 solid 2px">#}
+{#    </p>#}
+{##}
+{#    <P>#}
+{#        <input type="submit" value="提交"  style="border: #c21a04 solid 2px">#}
+{#    </P>#}
+{#      {% endblock %}#}
+{#</form>#}
+</body>
+</html>
