@@ -11,6 +11,7 @@ urlpatterns = [
     path("forget_password/",forget_password),
     path("change_password/",change_password),
     path("get_celery/",get_celery),
+    #path("user_center_site/",user_center_site),
 ]
 
 

@@ -3,8 +3,11 @@ from django.http import HttpResponseRedirect
 from Qshop.models import *
 from Quser.views import vaild_user
 from SHOP.viwes import set_password
+from Buyer.models import *
+from Quser.models import *
 
-2
+
+
 
 
 def goods_list(request):
@@ -16,10 +19,25 @@ def goods_list(request):
     return render(request,"buyer/goods_list.html",{"goods_list":goods_list})
 
 
+# def goods(request,id):
+#     goods_data=Goods.objects.get(id=int(id))
+#     return render(request, "buyer/goods.html", locals())
+
 def goods(request,id):
     goods_data=Goods.objects.get(id=int(id))
-    return render(request, "buyer/goods.html", locals())
-
+    email=request.COOKIES.get("email")
+    if email:
+        now_data=History.objects.filter(user_email=email).order_by("id")
+        if len(now_data)>=5:
+            now_data[0].delete()
+        history=History()
+        history.user_email=email
+        history.goods_id = id
+        history.goods_name = goods_data.name
+        history.goods_price = goods_data.price
+        history.goods_picture = goods_data.picture
+        history.save()
+    return render(request,"buyer/goods.html", locals())
 
 
 
@@ -113,20 +131,38 @@ def index(request):
 #     return render(request, "Buyer/cart.html")
 
 
-@login_valid
-def cart(request):
-    cookie_user=request.COOKIES.get("email")
-    session_user=request.session.get("email")
-    if cookie_user and session_user and cookie_user==session_user :
-        return render(request,"Buyer/cart.html")
-    else:
-        return HttpResponseRedirect("Buyer/login.html")
+# @login_valid
+# def cart(request):
+#     cookie_user=request.COOKIES.get("email")
+#     session_user=request.session.get("email")
+#     if cookie_user and session_user and cookie_user==session_user :
+#         return render(request,"Buyer/cart.html")
+#     else:
+#         return HttpResponseRedirect("Buyer/login.html")
+
+
+# @login_valid
+# def cart(request):
+#     email=request.COOKIES.get("email")
+#     goods_list=BuyCat.objects.filter(car_user=email)
+#     count=len(goods_list)
+#     return render(request,"buyer/cart.html",locals())
+
 
 def pay_order(request):
+    order_id=request.GET.get("order_id")
+    if order_id:
+        pay_order=Pay_order.objects.get("order_id")
+        if order_id:
+            p_order=Pay_order.objects.get(order_id=order_id)
+            order_info=p_order.order_info_set.all()
     return render(request,"buyer/place_order.html",locals())
 
 def pay_result(request):
-    data=request.GET
+    order_id=request.GET.get("out_trade_no")
+    p_order=Pay_order.objects.get(order_id=order_id)
+    p_order.order_state=1
+    p_order.save()
     return render(request,"buyer/pay_result.html",locals())
 
 import time
@@ -211,8 +247,9 @@ def add_car(request):
             car.goods_picture=goods.picture
             car.goods_price=goods.price
             car.goods_number=number
-            car.goods_total=number*goods.price
+            car.goods_total=int(number)*goods.price
             car.goods_store=goods.goods_store.id
+            car.goods_id=goods_id
             car.save()
             result["state"]="success"
             result["data"]="加入购物车成功"
@@ -221,11 +258,96 @@ def add_car(request):
 
 
 
+@login_valid
+def cart(request):
+    email=request.COOKIES.get("email")
+    goods_list=BuyCat.objects.filter(car_user=email)
+    count=len(goods_list)
+    if request.method=="POST":
+        data=request.POST
+        print(data)
+        post_data=[]
+        for key in data:
+            if key.startswith("check"):
+                id=key.split("_")[1]
+                num="number_%s"%id
+                number=data[num]
+                post_data.append((id,number))
+        p_order=Pay_order()
+        p_order.order_id=str(time.time()).replace(".","")
+        p_order.order_number=len(post_data)
+        p_order.order_user=Quser.objects.get(email=request.COOKIES.get("email"))
+        p_order.save()
+        order_total=0
+        for id,number in post_data:
+            number=int(number)
+            goods= Goods.objects.get(id=int(id))
+            o_info=Order_info()
+            o_info.order_id=p_order
+            o_info.goods_name = goods.name
+            o_info.goods_number = number
+            o_info.goods_price = goods.price
+            o_info.goods_total = number * goods.price
+            o_info.goods_picture = goods.picture.url
+            o_info.order_store =goods.goods_store
+            o_info.save()
+            order_total+=o_info.goods_total
+        p_order.order_total=order_total
+        p_order.save()
+        return HttpResponseRedirect("/buyer/place_order/?orde_id=%s"%p_order.order_id)
+    return render(request,"buyer/cart.html",locals())
 
 
 
 
+def user_center_info(request):
+    user_email=request.COOKIES.get("email")
+    user=Quser.objects.get(email=user_email)
+    goods_list=History.objects.filter(user_email=user_email)
+    return render(request,"buyer/user_center_info.html",locals())
 
 
+def user_center_site(request):
+    email=request.COOKIES.get("email")
+    user=Quser.objects.get(email=email)
+    addr = user.goodsaddress_set.filter(state=1)[0]
+    # if user.goodsaddress_set.filter(state=0):
+    #     addr=user.goodsaddress_set.filter(state=1)[0]
+    # else:
+    #     addr={}
+    if request.method=="POST":
+        recv=request.POST.get("recv")
+        post_number=request.POST.get("post_number")
+        address=request.POST.get("address")
+        phone=request.POST.get("phone")
+        addr=GoodsAddress()
+        addr.recver=recv
+        addr.address = address
+        addr.post_number = post_number
+        addr.phone = phone
+        addr.state = 0
+        addr.user = user
+        addr.save()
+        print(addr)
+    return render(request,"buyer/user_center_site.html",locals())
+
+# import csv
+# from django.http import HttpResponse
+# def fileTest(request):
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = "attachment;filename=abc.csv"
+#     writer = csv.writer(response)
+#     writer.writerow(['username', 'age', 'height', 'weight'])
+#     writer.writerow(['zhiliao', '18', '180', '100'])
+#     return response
 
 
+# import csv
+# # from django.http import HttpResponse
+# # def fileTest(request):
+# #     response=HttpResponse(content_type="text/csv")
+# #     response['Content-Disposition']="attachment;filename=abc.csv"
+# #     writer=csv.weiterow(response)
+# #     writer.writerow(['username','age','height','weight'])
+# #     writer.writerow(["zhangsan" ,"19","182","100"])
+# #     return response

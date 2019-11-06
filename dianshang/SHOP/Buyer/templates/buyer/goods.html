@@ -1,18 +1,47 @@
 {% extends "buyer/base.html" %}
 
 {% block title %}
-    商品列表
+    商品详情
 {% endblock %}
-
+{#{% block login %}#}
+{#{% endblock %}#}
 
 {% block content %}
     <div class="breadcrumb">
       <a href="#">全部分类</a>
       <span>></span>
       <a href="#">新鲜水果</a>
-   </div>
+      <span>></span>
+		<a href="#">商品详情</a>
+    </div>
 
-   <div class="main_wrap clearfix">
+<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img style="width: 100%" src="/static/{{ goods_data.picture }}"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{ goods_data.name }}</h3>
+			<p>草莓浆果柔软多汁，味美爽口，适合速冻保鲜贮藏。草莓速冻后，可以保持原有的色、香、味，既便于贮藏，又便于外销。</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em id="price" >{{ goods_data.price }}</em></span>
+				<span class="show_unit">单  位：500g</span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">数 量：</div>
+				<div class="num_add fl">
+					<input id="number" type="text" class="num_show fl" value="1">
+					<a href="javascript:;" class="add fr"  onclick="change_number('u')" >+</a>
+					<a href="javascript:;" class="minus fr" onclick="change_number('d')">-</a>
+				</div>
+			</div>
+			<div class="total">总价：<em id="total">{{ goods_data.price }}元</em></div>
+			<div class="operate_btn">
+				<a href="/Buyer/pay_order/" class="buy_btn">立即购买</a>
+				<a href="javascript:;" class="add_cart" id="add_cart"  good_num="{{ goods_data.id }}" onclick="add_car(this)">加入购物车</a>
+			</div>
+		</div>
+	</div>
+
+    <div class="main_wrap clearfix">
       <div class="l_wrap fl clearfix">
          <div class="new_goods">
             <h3>新品推荐</h3>
@@ -31,32 +60,27 @@
          </div>
       </div>
 
-      <div class="r_wrap fr clearfix">
-         <div class="sort_bar">
-            <a href="#" class="active">默认</a>
-            <a href="#">价格</a>
-            <a href="#">人气</a>
-         </div>
 
-         <ul class="goods_type_list clearfix">
+<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">商品介绍</li>
+				<li>评论</li>
+			</ul>
+			<div class="tab_content">
+				<dl>
+					<dt>商品详情：</dt>
+					<dd>草莓采摘园位于北京大兴区 庞各庄镇四各庄村 ，每年1月-6月面向北京以及周围城市提供新鲜草莓采摘和精品礼盒装草莓，草莓品种多样丰富，个大香甜。所有草莓均严格按照有机标准培育，不使用任何化肥和农药。草莓在采摘期间免洗可以直接食用。欢迎喜欢草莓的市民前来采摘，也欢迎各大单位选购精品有机草莓礼盒，有机草莓礼盒是亲朋馈赠、福利送礼的最佳选择。 </dd>
+				</dl>
+			</div>
+		</div>
 
 
-             {% if goods_list %}
-                {% for goods in goods_list %}
-                    <li>
-                        <a href="/Buyer/goods/{{ goods.id }}/"><img src="/static/{{ goods.picture }}"></a>
-                        <h4><a href="/Buyer/goods/{{ goods.id }}/">{{ goods.name }}</a></h4>
-                        <div class="operate">
-                            <span class="prize">￥{{ goods.price }}</span>
-                            <span class="unit">{{ goods.price }}/500g</span>
-                            <a href="#" class="add_goods" title="加入购物车"></a>
-                        </div>
-                    </li>
-                {% endfor %}
-                {% else %}
-                    <p>没有更多商品了</p>
-             {% endif %}
-            </ul>
+
+
+
+
+
+
 
          <div class="pagenation">
             <a href="#"><上一页</a>
@@ -67,6 +91,70 @@
             <a href="#">5</a>
             <a href="#">下一页></a>
          </div>
-      </div>
+{#      </div>#}
    </div>
+
+
+    {% block style %}
+    <script src="/static/Buyer/js/jquery-1.12.4.min.js"></script>
+{% endblock %}
+    <script>
+    function change_number(t) {
+        var obj=$("#number");
+        var value=parseInt(obj.val());
+        var price = parseFloat($("#price").text()) ;
+        if (t=="u"){
+            var value=value+1;
+
+        }else if (t=="d"){
+            var value=value-1;
+
+        }
+        if (value<1){
+        value=1
+
+    }
+    var total=price*value;
+    $("#total").text(total+"元");
+    obj.val(value);
+    };
+    $("#number").blur(
+        function () {
+            var obj = $("#number");
+            var value = parseInt(obj.val());
+            var price = parseFloat($("#price").text());
+            if (value < 1) {
+                value = 1;
+                obj.val(value);
+            }
+            var total = price * value;
+            $("#total").text(total + "元");
+        }
+    );
+    function add_car(obj) {
+        var good_id=$(obj).attr("good_num");
+        var good_number=$("#number").val();
+        var post_data={"goods_id":goods_id,"number":good_number,"csrfmiddlewaretoken":"{{ csrf_token }}"};
+        console.log(post_data);
+        $.ajax(
+            {
+                url:"/Buyer/add_car/",
+                type:"post",
+                data:post_data,
+                success:function (data) {
+                    alert(data["data"])
+
+                },
+                error:function (error) {
+                    console.log(error)
+
+                }
+            }
+        )
+
+    }
+    </script>
+
+
+
 {% endblock %}
